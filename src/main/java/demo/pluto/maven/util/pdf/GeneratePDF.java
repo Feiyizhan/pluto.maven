@@ -17,6 +17,7 @@ import java.util.Set;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.AcroFields.FieldPosition;
@@ -54,13 +55,9 @@ public class GeneratePDF {
         PdfReader reader = new PdfReader(FileUtil.getFileInput(template));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PdfStamper stamp = new PdfStamper(reader,baos);
-        
 
-        
-       
-        PRAcroForm form = reader.getAcroForm();
-//        //获取模版中的自定义的字段名列表
-//        List<FieldInformation> formFields = form.getFields();
+        //PRAcroForm form = reader.getAcroForm();
+
         //获取模版中的自定义字段的属性列表（包括字段的坐标信息）
         AcroFields fields = stamp.getAcroFields();
         if(dataList!=null){
@@ -83,6 +80,7 @@ public class GeneratePDF {
                 over.setTextMatrix(rectangle.getLeft(),rectangle.getBottom());
                 //设置字体和大小
                 over.setFontAndSize(font,fontSize);
+                //设置值
                 switch (data.getValueType()) {
                     case STRING:
                         over.showText(data.getStringValue());
@@ -99,7 +97,7 @@ public class GeneratePDF {
                             fpList.add(FindFieldPosition(fields,title[cel])); 
                         }
                         
-                        for(int i=1;i<values.length;i++){
+                        for(int i=0;i<values.length;i++){
                             float x = 0;
                             float y = 0;
                             for(int j=0;j<values[i].length;j++){
@@ -114,6 +112,9 @@ public class GeneratePDF {
                         }
                         break;
                     case BINARY:
+                        Image img = Image.getInstance(data.getBinaryValue());
+                        handlePerImage(img, spot);
+                        over.addImage(img);
                         
                         break;
                     default:
@@ -139,6 +140,7 @@ public class GeneratePDF {
             pdfCopy.addPage(impPage);
         }
         doc.close();
+        baos.close();
         byte[] result = output.toByteArray();
         output.close();
         return result;
@@ -161,4 +163,47 @@ public class GeneratePDF {
 
         return spots.get(0);
     }
+    
+    /**
+     * 根据单元格的信息，调整图片的缩放比例和相对位置。
+     * @author A4YL9ZZ pxu3@mmm.com
+     * @param img
+     * @param spot
+     * @return
+     */
+    public static void handlePerImage(Image img, final FieldPosition spot) {
+        //获取图片的高和宽
+        float width = img.getWidth();
+        float height = img.getHeight();
+        //获取单元格的高和宽（保留12像素的边距）
+        float maxHeight = spot.position.getHeight() - 12;
+        float maxWidth = spot.position.getWidth() - 12;
+        
+        //计算高和宽需要的缩放比例
+        float rateh = maxHeight / height;
+        float ratew = maxWidth / width;
+        float rate = 1;
+        if ((rateh < 1) || (ratew < 1)) {
+            rate = rateh > ratew ? ratew : rateh;
+        }
+        //得到缩放后的宽和高
+        float abstractH = height * rate;
+        float abstractW = width * rate;
+        //缩放图像.
+        img.scaleAbsolute(abstractW, abstractH);
+        
+        //x 坐标等于单元格最大宽度-图片的最大宽度的一半，也就是在单元格的中心位置。
+        float x = spot.position.getLeft() + (maxWidth - abstractW) / 2;
+        //y 坐标一样
+        float y = spot.position.getBottom() + (maxHeight - abstractH) / 2;
+        //设置图像的相对坐标
+        img.setAbsolutePosition(x, y);
+        
+        //计算图片的X轴最大坐标。（用于判断是否超过单元格）
+//        float positionimg = spot.position.getLeft() + (maxWidth - abstractW) / 2 + abstractW
+//                / 2;
+
+        
+    }
+    
 }
