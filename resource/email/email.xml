@@ -44,5 +44,5 @@
    <context:component-scan base-package="demo.pluto.maven.email" >  
     </context:component-scan>     
     
-    <util:properties id="configProperties" location="classpath:velocity.properties"/>
+
 </beans>

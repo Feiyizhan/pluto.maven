@@ -45,10 +45,10 @@ import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
 import sun.security.krb5.internal.NetClient;
 import demo.pluto.maven.util.FileUtil;
 
-@Service
+
 public class EmailDemo {
     ApplicationContext context;
-    @Autowired 
+
     JavaMailSender javaMailSender;
     //@Resource(name = "configProperties")
     //private Properties properties;
@@ -57,7 +57,7 @@ public class EmailDemo {
         // 获得xml文件环境
         context = new ClassPathXmlApplicationContext("email/email.xml");
         // 取得配置
-        //mailSender = (JavaMailSender) context.getBean("javaMailSender");
+        javaMailSender = (JavaMailSender) context.getBean("javaMailSender");
     }
 
 
@@ -104,7 +104,7 @@ public class EmailDemo {
         String subject = "";
         // 收件人
         List<String> receivers = new ArrayList<String>();
-        receivers.add("xmlde@vip.qq.com");
+        receivers.add("18121295313@163.com");
         
         // 抄送人
         List<String> ccs = new ArrayList<String>();
@@ -137,9 +137,10 @@ public class EmailDemo {
 //            helper.setFrom(new InternetAddress(fromName+" <pxu3@mmm.com>"));
 //            helper.setFrom(new InternetAddress("pxu3@mmm.com",fromName));
 //            helper.setFrom("pxu3@mmm.com",fromName);
-            helper.setFrom(new InternetAddress("EWCS-TSSD@mmm.com",fromName,"utf-8"));
+            helper.setFrom(new InternetAddress("xmlde@vip.qq.com",fromName,"utf-8"));
             
-//            helper.setFrom(fromName);
+//            helper.setFrom("交通安全系统部  <EWCS-TSSD@mmm.com>");
+//            helper.setFrom("Pluto Xu <pxu3@mmm.com>");
             if (receivers != null && receivers.size() > 0) {
                 String[] receiverArray = receivers.toArray(new String[receivers.size()]);
                 helper.setTo(receiverArray);
