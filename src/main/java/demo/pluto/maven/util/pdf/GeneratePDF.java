@@ -36,6 +36,10 @@ import demo.pluto.maven.util.pdf.field.TableValue;
 
 
 
+/**
+ * @author A4YL9ZZ pxu3@mmm.com
+ * <br/>基于iText 5.5.10
+ */
 public class GeneratePDF {
     
     public static final String FONT_NAME = "template/pdf/fonts/simfang.ttf";
