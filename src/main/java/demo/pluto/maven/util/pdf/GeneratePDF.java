@@ -103,7 +103,7 @@ public class GeneratePDF {
                             for(int j=0;j<values[i].length;j++){
                                 if(fpList.get(j)!=null){
                                     x = fpList.get(j).position.getLeft();
-                                    y= fpList.get(j).position.getBottom()-(i-1)*cellHeight;
+                                    y= fpList.get(j).position.getBottom()-i*cellHeight;
                                     over.setTextMatrix(x,y);
                                     over.showText(values[i][j]);
                                 }
