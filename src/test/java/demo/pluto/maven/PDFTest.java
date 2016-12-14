@@ -62,7 +62,7 @@ public class PDFTest extends TestCase {
             
             
             
-            byte[] b = GeneratePDF.generatePDF("template/pdf/2017 TSSD长期质保合同Word模板161209.pdf",dataList);
+            byte[] b = GeneratePDF.generatePDF("template/pdf/2017 TSSD长期质保合同Word模板.pdf",dataList);
             FileOutputStream fos = new FileOutputStream("C:\\github\\Generate PDF\\test.pdf");
             fos.write(b);
             fos.flush();
