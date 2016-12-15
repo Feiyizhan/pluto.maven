@@ -2,7 +2,9 @@ package demo.pluto.maven.util.pdf.old;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,12 @@ import java.util.List;
 
 
 
+
+
+
+
+
+import com.lowagie.text.BadElementException;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Image;
@@ -32,7 +40,10 @@ import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 
 import demo.pluto.maven.util.FileUtil;
+import demo.pluto.maven.util.pdf.old.field.ImageField;
 import demo.pluto.maven.util.pdf.old.field.FieldProperty;
+import demo.pluto.maven.util.pdf.old.field.SimpleField;
+import demo.pluto.maven.util.pdf.old.field.TableField;
 import demo.pluto.maven.util.pdf.old.field.TableValue;
 
 /**
@@ -42,7 +53,7 @@ import demo.pluto.maven.util.pdf.old.field.TableValue;
 public class GeneratePDFOld {
     public static final String FONT_NAME = "template/pdf/fonts/simfang.ttf";
     public static final float DEFAULT_FONTSIZE =8f;
-    static  BaseFont DEFAULT_FONT=null ;
+    public static  BaseFont DEFAULT_FONT=null ;
     static{
         try {
             DEFAULT_FONT =BaseFont.createFont(FONT_NAME, BaseFont.IDENTITY_H, BaseFont.EMBEDDED, false, null, null, false);
@@ -52,102 +63,228 @@ public class GeneratePDFOld {
         
     }
     
-    public static byte[] generatePDF(String template,List<FieldProperty> dataList) throws FileNotFoundException, IOException, DocumentException{
+    /**
+     * 根据PDFform的数据填充指定的模版，并返回填充好的结果。
+     * @author A4YL9ZZ pxu3@mmm.com
+     * @param template
+     * @param pdfForm
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws DocumentException
+     */
+    public static byte[] generatePDF(String template,PDFForm pdfForm) throws FileNotFoundException, IOException, DocumentException{
         //读取PDF模版
         PdfReader reader = new PdfReader(FileUtil.getFileInput(template));
+        //设置填充模版内容的输出流
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PdfStamper stamp = new PdfStamper(reader,baos);
+        
+        //多页的处理
+        Document doc = new Document();
+        //设置最终结果的输出流
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        PdfCopy pdfCopy = new PdfCopy(doc, output);
+        doc.open();
+        
+        if(pdfForm!=null){
+            fullSimpleForm(pdfForm,stamp);
+            fullImageForm(pdfForm,stamp);
 
+            //关闭PDF写入，并将全部数据刷新到输出流
+            stamp.close();
+            //缓存下非动态数据
+            byte[] simplePDF = baos.toByteArray();
 
-        //获取模版中的自定义字段的属性列表（包括字段的坐标信息）
-        AcroFields fields = stamp.getAcroFields();
-        if(dataList!=null){
-            //设置值
-            for(FieldProperty data:dataList){
-                FieldPosition spot = FindFieldPosition(fields,data.getName());
-                if(spot==null){  //字段不存在则忽略
-                    continue;
+            //生成动态数据
+            TableField tableField = pdfForm.getTableField();
+            if(tableField!=null && tableField.getTableValue()!=null){
+                TableValue tableValue = tableField.getTableValue();
+                //计算需要生成的页数
+                int pageSize = tableValue.getPageSize();
+                int pageCount = (int) Math.ceil(tableValue.getValues().length*1.0/pageSize) ;
+                
+                for(int pageNumber=1;pageNumber<=pageCount;pageNumber ++){
+                    //清空本页的输出流
+                    baos.reset();
+                    //根据缓存的内容重新生成PDFReader
+                    PdfReader tableReader = new PdfReader(simplePDF);
+                    //根据PDFReader和输出流创建PDF内容编辑对象
+                    PdfStamper tableStamp = new PdfStamper(tableReader,baos);
+                    //填充表格数据
+                    fullTableForm(pdfForm,tableStamp,pageNumber);
+                    //设置PDF表单不可编辑。
+                    tableStamp.setFormFlattening(true);
+                    //关闭PDF编辑，并将全部数据刷新到输出流
+                    tableStamp.close();
+                    //根据当前页的输出流重新创建一个PDFReader对象，通过该对象生成PDF Page。
+                    PdfImportedPage page = pdfCopy.getImportedPage(new PdfReader(baos.toByteArray()), 1);
+                    //将页面增加到最终的的结果PDF
+                    pdfCopy.addPage(page);
                 }
-                int page=(int)spot.getPage();
-                float x=spot.getX();
-                float y = spot.getY();
-                
-                BaseFont font = data.getFont()!=null?data.getFont():DEFAULT_FONT;
-                float fontSize = data.getFontSize()!=null?data.getFontSize().floatValue():DEFAULT_FONTSIZE;
-                
-                PdfContentByte over =stamp.getOverContent(page); 
-                over.beginText();
-                //设置内容的坐标。
-                over.setTextMatrix(x,y);
-                //设置字体和大小
-                over.setFontAndSize(font,fontSize);
-                //设置值
-                switch (data.getValueType()) {
-                    case STRING:
-                        over.showText(data.getStringValue());
-                        break;
-                    case LIST:
-                        break;
-                    case TABLE:
-                        TableValue tableValue = data.getTableValue();
-                        String[][] values = tableValue.getValues();
-                        String[] title = tableValue.getTitle();
-                        float cellHeight =tableValue.getCellHeight();
-                        List<FieldPosition> fpList = new ArrayList<FieldPosition>();
-                        for(int cel=0;cel<title.length;cel++){
-                            fpList.add(FindFieldPosition(fields,title[cel])); 
-                        }
-                        
-                        for(int i=0;i<values.length;i++){
-
-                            for(int j=0;j<values[i].length;j++){
-                                if(fpList.get(j)!=null){
-                                    x = fpList.get(j).getX();
-                                    y= fpList.get(j).getY()-i*cellHeight;
-                                    over.setTextMatrix(x,y);
-                                    over.showText(values[i][j]);
-                                }
-
-                            }
-                        }
-                        break;
-                    case BINARY:
-                        Image img = Image.getInstance(data.getBinaryValue());
-                        handlePerImage(img, spot);
-                        over.addImage(img);
-                        
-                        break;
-                    default:
-                        break;
-                }
-                
-                over.endText();
             }
         }
 
-        
-        
-        //取消字段的背景
-        stamp.setFormFlattening(true);
-        stamp.close();
-        //多页的处理
-//        Document doc = new Document();
-//        ByteArrayOutputStream output = new ByteArrayOutputStream();
-//        PdfCopy pdfCopy = new PdfCopy(doc, output);
-//        doc.open();
-//        int pageCount = reader.getNumberOfPages();
-//        for (int j = 1; j <= pageCount; j++) {
-//            PdfImportedPage impPage = pdfCopy.getImportedPage(new PdfReader(baos.toByteArray()), j);
-//            pdfCopy.addPage(impPage);
-//        }
-//        doc.close();
-//        baos.close();
-//        byte[] result = output.toByteArray();
-//        output.close();
-        byte[] result=baos.toByteArray();
+        //关闭输出流和文档。
         baos.close();
+        doc.close();
+        output.close();
+        byte[] result = output.toByteArray();
+  
         return result;
         
+        
+    }
+    
+    /**
+     * 填充简单数据
+     * @author A4YL9ZZ pxu3@mmm.com
+     * @param pdfForm
+     * @param stamp
+     * @throws MalformedURLException
+     * @throws IOException
+     * @throws DocumentException
+     */
+    private static void fullSimpleForm(PDFForm pdfForm,PdfStamper stamp) throws MalformedURLException, IOException, DocumentException{
+        if(pdfForm!=null){
+            //获取模版中的自定义字段的属性列表（包括字段的坐标信息）
+            AcroFields fields = stamp.getAcroFields();
+            //设置普通的值
+            List<SimpleField> simpleFields= pdfForm.getSimpleFields();
+            if(simpleFields!=null){
+                for(SimpleField field:simpleFields){
+                    FieldPosition spot = FindFieldPosition(fields,field.getName()); 
+                    if(spot==null){  //字段不存在则忽略
+                        continue;
+                    }
+                    int page=(int)spot.getPage();
+                    float x=spot.getX();
+                    float y = spot.getY();
+                    FieldProperty fieldProperty = field.getFieldProperty();
+                    BaseFont font = fieldProperty!=null && fieldProperty.getFont()!=null?fieldProperty.getFont():DEFAULT_FONT;
+                    float fontSize =fieldProperty!=null && fieldProperty.getFontSize()!=null?fieldProperty.getFontSize().floatValue():DEFAULT_FONTSIZE;
+                    
+                    PdfContentByte over =stamp.getOverContent(page); 
+                    over.beginText();
+                    //设置内容的坐标。
+                    over.setTextMatrix(x,y);
+                    //设置字体和大小
+                    over.setFontAndSize(font,fontSize);
+                    //设置值
+                    over.showText(field.getSimpleValue());
+                    over.endText();
+                    
+                }
+            }
+        }
+    }
+    
+    /**
+     * 填充图片数据
+     * @author A4YL9ZZ pxu3@mmm.com
+     * @param pdfForm
+     * @param stamp
+     * @throws MalformedURLException
+     * @throws IOException
+     * @throws DocumentException
+     */
+    private static void fullImageForm(PDFForm pdfForm,PdfStamper stamp) throws MalformedURLException, IOException, DocumentException{
+        if(pdfForm!=null){
+            //获取模版中的自定义字段的属性列表（包括字段的坐标信息）
+            AcroFields fields = stamp.getAcroFields();
+            //设置二进制的值
+            List<ImageField> binaryFields= pdfForm.getBinaryFields();
+            if(binaryFields!=null){
+                for(ImageField field:binaryFields){
+                    FieldPosition spot = FindFieldPosition(fields,field.getName()); 
+                    if(spot==null){  //字段不存在则忽略
+                        continue;
+                    }
+                    int page=(int)spot.getPage();
+                    float x=spot.getX();
+                    float y = spot.getY();
+                    FieldProperty fieldProperty = field.getFieldProperty();
+                    BaseFont font = fieldProperty!=null && fieldProperty.getFont()!=null?fieldProperty.getFont():DEFAULT_FONT;
+                    float fontSize =fieldProperty!=null && fieldProperty.getFontSize()!=null?fieldProperty.getFontSize().floatValue():DEFAULT_FONTSIZE;
+                    
+                    PdfContentByte over =stamp.getOverContent(page); 
+                    over.beginText();
+                    //设置内容的坐标。
+                    over.setTextMatrix(x,y);
+                    //设置字体和大小
+                    over.setFontAndSize(font,fontSize);
+                    
+                    Image img = Image.getInstance(field.getBinaryValue());
+                    //图片缩放
+                    handlePerImage(img, spot);
+                    //设置值
+                    over.addImage(img);
+                    over.endText();
+                    
+                }
+            }
+        }
+    }
+    
+    /**
+     * 填充表格
+     * @author A4YL9ZZ pxu3@mmm.com
+     * @param pdfForm
+     * @param stamp
+     * @param pageNumber
+     */
+    private static void fullTableForm(PDFForm pdfForm,PdfStamper stamp,int pageNumber){
+        TableField tableField = pdfForm.getTableField();
+        TableValue tableValue = tableField.getTableValue();
+        //获取模版中的自定义字段的属性列表（包括字段的坐标信息）
+        AcroFields fields = stamp.getAcroFields();
+        FieldPosition spot = FindFieldPosition(fields,tableField.getName());
+        if(spot==null){  //字段不存在则忽略
+            return;
+        }
+        int page=(int)spot.getPage();
+        float x=spot.getX();
+        float y = spot.getY();
+        
+        FieldProperty fieldProperty = tableField.getFieldProperty();
+        BaseFont font = fieldProperty!=null && fieldProperty.getFont()!=null?fieldProperty.getFont():DEFAULT_FONT;
+        float fontSize =fieldProperty!=null && fieldProperty.getFontSize()!=null?fieldProperty.getFontSize().floatValue():DEFAULT_FONTSIZE;
+        
+        
+        String[][] values = tableValue.getValues();
+        String[] title = tableValue.getTitle();
+        float cellHeight =tableValue.getCellHeight();
+        List<FieldPosition> fpList = new ArrayList<FieldPosition>();
+        //获取标题行的位置
+        for(int cel=0;cel<title.length;cel++){
+            fpList.add(FindFieldPosition(fields,title[cel])); 
+        }
+        
+        int pageSize = tableValue.getPageSize();
+        int offset = (pageNumber -1) * pageSize;
+        int max =Math.min(values.length, offset+pageSize);
+        int count = max -offset;
+        
+        PdfContentByte over =stamp.getOverContent(page); 
+        over.beginText();
+        //设置字体和大小
+        over.setFontAndSize(font,fontSize);
+        
+        for(int i=0;i<count;i++){
+
+            for(int j=0;j<values[i].length;j++){
+                if(fpList.get(j)!=null){
+                    x = fpList.get(j).getX();
+                    y= fpList.get(j).getY()-i*cellHeight;
+                    //设置内容的坐标。
+                    over.setTextMatrix(x,y);
+                    over.showText(values[i+offset][j]);
+                }
+
+            }
+        }
+        
+        over.endText();
         
     }
     

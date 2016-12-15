@@ -17,6 +17,12 @@ public class TableValue{
      * 单元格高度
      */
     float cellHeight;
+    
+    /**
+     * 页面记录数
+     */
+    int pageSize;
+    
     public String[] getTitle() {
         return title;
     }
@@ -36,11 +42,20 @@ public class TableValue{
         this.cellHeight = cellHeight;
     }
     
-    public TableValue(String[] title, String[][] values, float cellHeight) {
+    
+    public int getPageSize() {
+        return pageSize;
+    }
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+    
+    public TableValue(String[] title, String[][] values, float cellHeight,int pageSize) {
         super();
         this.title = title;
         this.values = values;
         this.cellHeight = cellHeight;
+        this.pageSize=pageSize;
     }
     
     
