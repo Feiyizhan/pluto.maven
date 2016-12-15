@@ -14,12 +14,20 @@ import java.util.List;
 
 
 
+
+
+
+
 import com.lowagie.text.DocumentException;
 
 import demo.pluto.maven.util.DateUtil;
 import demo.pluto.maven.util.FileUtil;
 import demo.pluto.maven.util.pdf.old.GeneratePDFOld;
+import demo.pluto.maven.util.pdf.old.PDFForm;
+import demo.pluto.maven.util.pdf.old.field.ImageField;
 import demo.pluto.maven.util.pdf.old.field.FieldProperty;
+import demo.pluto.maven.util.pdf.old.field.SimpleField;
+import demo.pluto.maven.util.pdf.old.field.TableField;
 import demo.pluto.maven.util.pdf.old.field.TableValue;
 import junit.framework.TestCase;
 
@@ -30,14 +38,19 @@ public class PDFOldTest extends TestCase {
     
     public void testGeneratePDFOld(){
         try {
-            List<FieldProperty> dataList = new ArrayList<FieldProperty>();
-            FieldProperty contractNumber = new FieldProperty("CA-BB","contractNumber");
-            FieldProperty projectName = new FieldProperty("BBBB","projectName");
-            FieldProperty customerName = new FieldProperty("CCCC","CustomerName");
-            FieldProperty application = new FieldProperty("DDDD","application");
-            FieldProperty installaddress = new FieldProperty("施工地址","installaddress");
-            FieldProperty issueDate = new FieldProperty(DateUtil.date2String(new Date(), null),"issueDate");
-            FieldProperty installDate = new FieldProperty(DateUtil.date2String(new Date(), null),"installDate");
+            PDFForm form = new PDFForm();
+            List<SimpleField> simpleFields = new ArrayList<SimpleField>();
+            
+            List<ImageField> binaryFields =new ArrayList<ImageField>();
+          
+            
+            simpleFields.add(new SimpleField("contractNumber","CA-BB"));
+            simpleFields.add(new SimpleField("projectName","BBBB"));
+            simpleFields.add(new SimpleField("customerName","CCCC"));
+            simpleFields.add(new SimpleField("application","DDDD"));
+            simpleFields.add(new SimpleField("installaddress","施工地址"));
+            simpleFields.add(new SimpleField("issueDate",DateUtil.date2String(new Date(), null)));
+            simpleFields.add(new SimpleField("installDate",DateUtil.date2String(new Date(), null)));
             
             
             
@@ -45,31 +58,26 @@ public class PDFOldTest extends TestCase {
             title[0]= "productName";
             title[1]= "countAndUnit";
             title[2]= "warrantyInfo";
-            String[][] table = new String[7][3];
-
-            for(int row=0;row <7;row ++){
-                table[row][0]= "产品名称";
+            String[][] table = new String[25][3];
+            int pageSize = 7;
+            for(int row=0;row <25;row ++){
+                table[row][0]= "产品名称"+row;
                 table[row][1]= "1234.45";
                 table[row][2]= "10年质保";
             }
-            FieldProperty productName = new FieldProperty(new TableValue(title,table,29),"productName");
+            
+            TableField tableField  = new TableField("productName",new TableValue(title,table,29,pageSize));
 
             byte[] result = FileUtil.readFile("C:\\github\\CHK_EWCS_TSSD\\workspace\\EWCSTSSD\\WebContent\\resources\\left.jpg");
             
-            FieldProperty picture = new FieldProperty(result,"picture");
+            binaryFields.add(new ImageField("picture",result));
             
-            dataList.add(contractNumber);
-            dataList.add(projectName);
-            dataList.add(customerName);
-            dataList.add(application);
-            dataList.add(installaddress);
-            dataList.add(issueDate);
-            dataList.add(installDate);
-            dataList.add(productName);
-            dataList.add(picture);
+
+            form.setBinaryFields(binaryFields);
+            form.setSimpleFields(simpleFields);
+            form.setTableField(tableField);
             
-            
-            byte[] b = GeneratePDFOld.generatePDF("template/pdf/2017 TSSD长期质保合同Word模板.pdf",dataList);
+            byte[] b = GeneratePDFOld.generatePDF("template/pdf/2017 TSSD长期质保合同Word模板.pdf",form);
             FileOutputStream fos = new FileOutputStream("C:\\github\\Generate PDF\\test.pdf");
             fos.write(b);
             fos.flush();
