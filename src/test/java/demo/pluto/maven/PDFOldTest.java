@@ -61,7 +61,7 @@ public class PDFOldTest extends TestCase {
             String[][] table = new String[25][3];
             int pageSize = 7;
             for(int row=0;row <25;row ++){
-                table[row][0]= "产品名称"+row;
+                table[row][0]= "一二三四五六七八九零一二三四五六七八九零一二三四五六七八九零一二三四五六七八九零一二三四五六七八九零"+row;
                 table[row][1]= "1234.45";
                 table[row][2]= "10年质保";
             }

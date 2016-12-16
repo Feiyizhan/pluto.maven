@@ -10,36 +10,30 @@ package demo.pluto.maven.util.pdf.old.field;
 
 import com.lowagie.text.pdf.BaseFont;
 
+
 /**
- * PDF Template field property.
- * 
- * @author cnv00845
+ * @author A4YL9ZZ pxu3@mmm.com
+ *
  */
 public class FieldProperty {
 	
 	/**
 	 * 字体大小
 	 */
-	private Float fontSize;
+	private FontProperty fontProperty;
 	
 	/**
 	 * 字体
 	 */
 	private BaseFont font;
-	
 
-
-    public Float getFontSize() {
-        return fontSize;
+    public FontProperty getFontProperty() {
+        return fontProperty;
     }
 
-
-
-    public void setFontSize(Float fontSize) {
-        this.fontSize = fontSize;
+    public void setFontProperty(FontProperty fontProperty) {
+        this.fontProperty = fontProperty;
     }
-
-
 
     public BaseFont getFont() {
         return font;

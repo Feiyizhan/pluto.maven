@@ -42,12 +42,13 @@ import demo.pluto.maven.util.pdf.field.TableValue;
  */
 public class GeneratePDF {
     
-    public static final String FONT_NAME = "template/pdf/fonts/simfang.ttf";
-    public static final float DEFAULT_FONTSIZE =8f;
+    public static final String FONT_NAME_SONGTI = "template/pdf/fonts/simsun.ttc";
+    public static final String FONT_NAME_TIMES = "template/pdf/fonts/times.ttf";
+    public static final float DEFAULT_FONTSIZE =9f;
     static  BaseFont DEFAULT_FONT=null ;
     static{
         try {
-            DEFAULT_FONT =BaseFont.createFont(FONT_NAME, BaseFont.IDENTITY_H, BaseFont.EMBEDDED, false, null, null, false);
+            DEFAULT_FONT =BaseFont.createFont(FONT_NAME_SONGTI, BaseFont.IDENTITY_H, BaseFont.EMBEDDED, false, null, null, false);
         } catch (Exception e) {
             e.printStackTrace();
         }

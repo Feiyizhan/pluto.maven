@@ -27,6 +27,8 @@ import java.util.List;
 
 
 
+
+
 import com.lowagie.text.BadElementException;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -40,6 +42,7 @@ import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 
 import demo.pluto.maven.util.FileUtil;
+import demo.pluto.maven.util.pdf.old.field.FontProperty;
 import demo.pluto.maven.util.pdf.old.field.ImageField;
 import demo.pluto.maven.util.pdf.old.field.FieldProperty;
 import demo.pluto.maven.util.pdf.old.field.SimpleField;
@@ -51,17 +54,24 @@ import demo.pluto.maven.util.pdf.old.field.TableValue;
  * <br/>基于iText 2.1.*版本
  */
 public class GeneratePDFOld {
-    public static final String FONT_NAME = "template/pdf/fonts/simfang.ttf";
-    public static final float DEFAULT_FONTSIZE =8f;
+
+        
+
+    
+    
+    public static final String FONT_NAME_SONGTI = "template/pdf/fonts/simsun.ttc,1";
+    public static final String FONT_NAME_TIMES = "template/pdf/fonts/times.ttf";
+    public static final FontProperty DEFAULT_FONTSIZE =FontProperty.PT9;
     public static  BaseFont DEFAULT_FONT=null ;
     static{
         try {
-            DEFAULT_FONT =BaseFont.createFont(FONT_NAME, BaseFont.IDENTITY_H, BaseFont.EMBEDDED, false, null, null, false);
+            DEFAULT_FONT =BaseFont.createFont(FONT_NAME_SONGTI, BaseFont.IDENTITY_H, BaseFont.EMBEDDED, false, null, null, false);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
     }
+    
+    
     
     /**
      * 根据PDFform的数据填充指定的模版，并返回填充好的结果。
@@ -135,6 +145,47 @@ public class GeneratePDFOld {
         
         
     }
+    private static FontProperty calculateFont(FontProperty fp,float width,float height,String value){
+        //计算内容的宽度，判断宽度是否超过单元格的宽度.
+        float oneChar = fp.getMm();
+        float size = value.length() * oneChar;
+        int countLine =(int) Math.ceil(size *1.0 / width);
+        //计算字体高度是否超过单元格高度，超过则缩小字体.
+        if(oneChar*0.5f*countLine > height){
+            //判断是否是最小号的字体了，如果是，则不再递归
+            if(fp.getType() == FontProperty.getMin().getType()){
+                return fp;
+            }else{
+               return calculateFont(FontProperty.getLess(fp),width,height,value);
+            }
+        }
+        return fp;
+    }
+    
+    private static void fullSimpleCell(BaseFont font,FontProperty fp,float x,float y,String value,PdfContentByte over,float width,float height){
+        FontProperty fpT = calculateFont(fp,width,height,value);
+        float oneChar = fpT.getMm();
+        float size = value.length() * oneChar;
+        int lineChars = (int)Math.floor(width * 1.0 / oneChar);
+        int countLine =(int) Math.ceil(size *1.0 / width);
+        //设置字体和大小
+        over.setFontAndSize(font,fpT.getType());
+        y = y+(oneChar*0.5f*(countLine-1))  ;
+        for(int i=0;i<countLine;i++){
+          //设置内容的坐标。
+          over.setTextMatrix(x,y);
+          //设置值
+          if((i+1)*lineChars > value.length()){
+              over.showText(value.substring(i*lineChars)); 
+          }else{
+              over.showText(value.substring(i*lineChars,(i+1)*lineChars)); 
+          }
+          
+          y-=(oneChar*0.5f);
+        }
+      
+
+    }
     
     /**
      * 填充简单数据
@@ -161,8 +212,10 @@ public class GeneratePDFOld {
                     float x=spot.getX();
                     float y = spot.getY();
                     FieldProperty fieldProperty = field.getFieldProperty();
+                   
                     BaseFont font = fieldProperty!=null && fieldProperty.getFont()!=null?fieldProperty.getFont():DEFAULT_FONT;
-                    float fontSize =fieldProperty!=null && fieldProperty.getFontSize()!=null?fieldProperty.getFontSize().floatValue():DEFAULT_FONTSIZE;
+                    FontProperty fp = fieldProperty!=null?fieldProperty.getFontProperty():DEFAULT_FONTSIZE;
+                    float fontSize =fp.getType();
                     
                     PdfContentByte over =stamp.getOverContent(page); 
                     over.beginText();
@@ -178,6 +231,8 @@ public class GeneratePDFOld {
             }
         }
     }
+    
+    
     
     /**
      * 填充图片数据
@@ -205,7 +260,9 @@ public class GeneratePDFOld {
                     float y = spot.getY();
                     FieldProperty fieldProperty = field.getFieldProperty();
                     BaseFont font = fieldProperty!=null && fieldProperty.getFont()!=null?fieldProperty.getFont():DEFAULT_FONT;
-                    float fontSize =fieldProperty!=null && fieldProperty.getFontSize()!=null?fieldProperty.getFontSize().floatValue():DEFAULT_FONTSIZE;
+                    FontProperty fp = fieldProperty!=null?fieldProperty.getFontProperty():DEFAULT_FONTSIZE;
+                    float fontSize =fp.getType();
+                    
                     
                     PdfContentByte over =stamp.getOverContent(page); 
                     over.beginText();
@@ -248,8 +305,8 @@ public class GeneratePDFOld {
         
         FieldProperty fieldProperty = tableField.getFieldProperty();
         BaseFont font = fieldProperty!=null && fieldProperty.getFont()!=null?fieldProperty.getFont():DEFAULT_FONT;
-        float fontSize =fieldProperty!=null && fieldProperty.getFontSize()!=null?fieldProperty.getFontSize().floatValue():DEFAULT_FONTSIZE;
-        
+        FontProperty fp = fieldProperty!=null?fieldProperty.getFontProperty():DEFAULT_FONTSIZE;
+        float fontSize =fp.getType();
         
         String[][] values = tableValue.getValues();
         String[] title = tableValue.getTitle();
@@ -276,9 +333,10 @@ public class GeneratePDFOld {
                 if(fpList.get(j)!=null){
                     x = fpList.get(j).getX();
                     y= fpList.get(j).getY()-i*cellHeight;
-                    //设置内容的坐标。
-                    over.setTextMatrix(x,y);
-                    over.showText(values[i+offset][j]);
+                    fullSimpleCell(font,fp,x,y,values[i+offset][j],over,spot.getWidth(),cellHeight);
+//                    //设置内容的坐标。
+//                    over.setTextMatrix(x,y);
+//                    over.showText(values[i+offset][j]);
                 }
 
             }
