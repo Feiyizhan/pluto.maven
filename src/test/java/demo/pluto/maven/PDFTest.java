@@ -10,12 +10,12 @@ import java.util.List;
 import com.itextpdf.text.DocumentException;
 
 import demo.pluto.maven.email.EmailDemo;
+import demo.pluto.maven.pdf.GeneratePDF;
+import demo.pluto.maven.pdf.field.FieldProperty;
+import demo.pluto.maven.pdf.field.TableValue;
+import demo.pluto.maven.pdf.field.FieldProperty.ValueType;
 import demo.pluto.maven.util.DateUtil;
 import demo.pluto.maven.util.FileUtil;
-import demo.pluto.maven.util.pdf.GeneratePDF;
-import demo.pluto.maven.util.pdf.field.FieldProperty;
-import demo.pluto.maven.util.pdf.field.FieldProperty.ValueType;
-import demo.pluto.maven.util.pdf.field.TableValue;
 import junit.framework.TestCase;
 
 public class PDFTest extends TestCase {
