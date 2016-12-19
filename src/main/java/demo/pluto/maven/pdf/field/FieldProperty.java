@@ -6,7 +6,7 @@
  * notice applies:
  *      Copyright © 2009, 3M. All rights reserved.
  */
-package demo.pluto.maven.util.pdf.field;
+package demo.pluto.maven.pdf.field;
 
 import java.awt.Color;
 import java.util.List;

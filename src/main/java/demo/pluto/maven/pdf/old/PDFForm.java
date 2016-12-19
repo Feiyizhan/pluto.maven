@@ -1,10 +1,10 @@
-package demo.pluto.maven.util.pdf.old;
+package demo.pluto.maven.pdf.old;
 
 import java.util.List;
 
-import demo.pluto.maven.util.pdf.old.field.ImageField;
-import demo.pluto.maven.util.pdf.old.field.SimpleField;
-import demo.pluto.maven.util.pdf.old.field.TableField;
+import demo.pluto.maven.pdf.old.field.ImageField;
+import demo.pluto.maven.pdf.old.field.SimpleField;
+import demo.pluto.maven.pdf.old.field.TableField;
 
 public class PDFForm {
     

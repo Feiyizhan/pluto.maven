@@ -1,4 +1,4 @@
-package demo.pluto.maven.util.pdf.old;
+package demo.pluto.maven.pdf.old;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+
 
 
 
@@ -41,13 +42,13 @@ import com.lowagie.text.pdf.PdfImportedPage;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 
+import demo.pluto.maven.pdf.old.field.FieldProperty;
+import demo.pluto.maven.pdf.old.field.FontProperty;
+import demo.pluto.maven.pdf.old.field.ImageField;
+import demo.pluto.maven.pdf.old.field.SimpleField;
+import demo.pluto.maven.pdf.old.field.TableField;
+import demo.pluto.maven.pdf.old.field.TableValue;
 import demo.pluto.maven.util.FileUtil;
-import demo.pluto.maven.util.pdf.old.field.FontProperty;
-import demo.pluto.maven.util.pdf.old.field.ImageField;
-import demo.pluto.maven.util.pdf.old.field.FieldProperty;
-import demo.pluto.maven.util.pdf.old.field.SimpleField;
-import demo.pluto.maven.util.pdf.old.field.TableField;
-import demo.pluto.maven.util.pdf.old.field.TableValue;
 
 /**
  * @author A4YL9ZZ pxu3@mmm.com
@@ -71,7 +72,37 @@ public class GeneratePDFOld {
         }
     }
     
-    
+    /**
+     * 合并多个Page页为一个PDF
+     * @author A4YL9ZZ pxu3@mmm.com
+     * @param mainPage
+     * @param pageList
+     * @return
+     * @throws DocumentException 
+     * @throws IOException 
+     */
+    public static byte[] mergePDF(byte[] mainPage,List<byte[]> pageList) throws DocumentException, IOException{
+        //多页的处理
+        Document doc = new Document();
+        //设置最终结果的输出流
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        PdfCopy pdfCopy = new PdfCopy(doc, output);
+        doc.open();
+        PdfImportedPage page = pdfCopy.getImportedPage(new PdfReader(mainPage), 1);
+        for(byte[] data:pageList){
+            //根据当前页的输出流重新创建一个PDFReader对象，通过该对象生成PDF Page。
+            page = pdfCopy.getImportedPage(new PdfReader(data), 1);
+            //将页面增加到最终的的结果PDF
+            pdfCopy.addPage(page);
+        }
+        
+        //关闭输出流和文档。
+        doc.close();
+        output.close();
+        byte[] result = output.toByteArray();
+        return result;
+
+    }
     
     /**
      * 根据PDFform的数据填充指定的模版，并返回填充好的结果。
@@ -146,6 +177,7 @@ public class GeneratePDFOld {
         
     }
     private static FontProperty calculateFont(FontProperty fp,float width,float height,String value){
+        System.out.println(value);
         //计算内容的宽度，判断宽度是否超过单元格的宽度.
         float oneChar = fp.getMm();
         float size = value.length() * oneChar;
@@ -163,6 +195,7 @@ public class GeneratePDFOld {
     }
     
     private static void fullSimpleCell(BaseFont font,FontProperty fp,float x,float y,String value,PdfContentByte over,float width,float height){
+        
         FontProperty fpT = calculateFont(fp,width,height,value);
         float oneChar = fpT.getMm();
         float size = value.length() * oneChar;

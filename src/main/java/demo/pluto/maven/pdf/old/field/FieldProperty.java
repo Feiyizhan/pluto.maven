@@ -6,7 +6,7 @@
  * notice applies:
  *      Copyright © 2009, 3M. All rights reserved.
  */
-package demo.pluto.maven.util.pdf.old.field;
+package demo.pluto.maven.pdf.old.field;
 
 import com.lowagie.text.pdf.BaseFont;
 

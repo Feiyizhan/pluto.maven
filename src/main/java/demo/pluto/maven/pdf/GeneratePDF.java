@@ -1,4 +1,4 @@
-package demo.pluto.maven.util.pdf;
+package demo.pluto.maven.pdf;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -30,9 +30,9 @@ import com.itextpdf.text.pdf.PdfImportedPage;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 
+import demo.pluto.maven.pdf.field.FieldProperty;
+import demo.pluto.maven.pdf.field.TableValue;
 import demo.pluto.maven.util.FileUtil;
-import demo.pluto.maven.util.pdf.field.FieldProperty;
-import demo.pluto.maven.util.pdf.field.TableValue;
 
 
 
