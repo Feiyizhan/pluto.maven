@@ -13,7 +13,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 
 public class FileUtil {
-
+    
 	/**
 	 * 以指定的编码读取文件，读取成功返回内容字符串，失败返回null
 	 * @param fileName
@@ -120,4 +120,72 @@ public class FileUtil {
 		
 		
 	}
+	
+	   /**
+     * 创建文件,包括父目录
+     * @param parent
+     * @param file
+     * @return
+     */
+    public static boolean createFile(String parent,String file){
+        return createFile(new File(parent,file));
+    }
+    
+    /**
+     * 创建文件,包括父目录
+     * @param file
+     * @return
+     */
+    public static boolean createFile(String file){
+        return createFile(new File(file));
+    }
+    
+    /**
+     * 创建文件,包括父目录
+     * @param f
+     * @return
+     */
+    public static boolean createFile(File f){
+        try {
+            if(f.exists()){
+                f.delete();
+            }
+            return f.createNewFile();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+        }
+        return false;
+    }
+    
+    /**
+     * 创建目录,包括父目录
+     * @param parent
+     * @param file
+     * @return
+     */
+    public static boolean createDir(String parent,String file){
+        return createDir(new File(parent,file));
+    }
+    
+    /**
+     * 创建目录,包括父目录
+     * @param dir
+     * @return
+     */
+    public static boolean createDir(String dir){
+        return createDir(new File(dir));
+    }
+    
+    /**
+     * 创建目录,包括父目录
+     * @param f
+     * @return
+     */
+    public static boolean createDir(File f){
+        if(!f.exists()){
+            return f.mkdirs();
+        }
+
+        return true;
+    }
 }
