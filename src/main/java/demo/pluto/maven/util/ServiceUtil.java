@@ -188,13 +188,15 @@ public class ServiceUtil {
 
 	public static void main(String[] args){
 		String saveFolder="C:\\github\\GeneratedProject";
-		String basePackage="com.mmm.ewcstssd";
-		String beanPackage="com.mmm.ewcstssd.bean";
-		List<String> classList =PackageUtil.getClassName(beanPackage);
+		String basePackage="com.mmm.fsfjos";
+		String beanPackage="com.mmm.fsfjos.bean";
+		String classPath="C:\\github\\FSFJOS\\workspace\\FSFJOS\\build\\classes\\";
+		List<String> classList =PackageUtil.getClassName(beanPackage,classPath);
+		TestClassLoader classLoader = new TestClassLoader();
 		for(String name:classList){
 			try {
 				System.out.println(name);
-				generateCURDService(ServiceUtil.class.getClassLoader().loadClass(name),saveFolder,basePackage);
+				generateCURDService(classLoader.loadClass(name,classPath),saveFolder,basePackage);
 				
 			} catch (Exception e) {
 				e.printStackTrace();

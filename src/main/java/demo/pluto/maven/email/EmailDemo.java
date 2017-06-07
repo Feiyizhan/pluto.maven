@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -63,7 +64,7 @@ public class EmailDemo {
 
     public void sendSimpleMailMessage() {
         SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setFrom("交通安全系统部 <EWCS-TSSD@mmm.com>");
+        mail.setFrom("CHINA MTO SYSTEM <cn-mto-sys@mmm.com>");
         mail.setTo("xmlde@vip.qq.com");
         mail.setSubject("testEmail");
 
@@ -81,7 +82,8 @@ public class EmailDemo {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mailMessage, true);
 
             // 设置收件人，寄件人
-            messageHelper.setFrom("徐明龙 <pxu3@mmm.com>");
+            //messageHelper.setFrom("徐明龙 <pxu3@mmm.com>");
+            messageHelper.setFrom(new InternetAddress("cn-mto-sys@mmm.com", "CHINA MTO SYSTEM"));
             messageHelper.setTo("pxu3@mmm.com");
             messageHelper.setSubject("测试邮件中嵌套图片!！");
             // true 表示启动HTML格式的邮件
@@ -90,6 +92,9 @@ public class EmailDemo {
             messageHelper.addInline("aaa", img);
             javaMailSender.send(mailMessage);
         } catch (MessagingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -221,7 +226,7 @@ public class EmailDemo {
     
     public static void main(String args[]){
         EmailDemo demo = new EmailDemo();
-        demo.sendSimpleMailMessage();
+        demo.sendHtmlMailMessage();
     }
     
 
