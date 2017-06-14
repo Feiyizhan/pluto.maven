@@ -153,14 +153,28 @@
 		    <artifactId>jackson-databind</artifactId>
 		    <version>2.6.0</version>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpclient</artifactId>
+		    <version>4.5.3</version>
+		</dependency>
+		
 
-<!-- iText 5.1 -->
-<dependency>
-  <groupId>com.itextpdf</groupId>
-  <artifactId>itextpdf</artifactId>
-  <version>5.5.10</version>
-</dependency>
+		<!-- iText 5.1 -->
+		<dependency>
+		  <groupId>com.itextpdf</groupId>
+		  <artifactId>itextpdf</artifactId>
+		  <version>5.5.10</version>
+		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+		<dependency>
+		    <groupId>com.google.guava</groupId>
+		    <artifactId>guava</artifactId>
+		    <version>22.0</version>
+		</dependency>
 
 	</dependencies>
 </project>
