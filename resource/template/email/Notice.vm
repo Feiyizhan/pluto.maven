@@ -1,0 +1,12 @@
+<p>Customer Order： ${customerOrder} </p>
+<p>Customer Order ${customerOrderLine} </p>
+<p>状态：${status}</p>
+
+<p>详情见URL：<br/>
+<a href="${url}">${url}</a>
+</p>
+<br/>
+<br/>
+<br/>
+本邮件由系统自动发出，请勿回复。
+

@@ -37,7 +37,7 @@ public class FileUtil {
 	
 	/**
 	 * 读取文件，返回二进制内容。
-	 * @author A4YL9ZZ pxu3@mmm.com
+	 * @author A4YL9ZZ 
 	 * @param fileName
 	 * @return
 	 * @throws IOException 
@@ -48,7 +48,7 @@ public class FileUtil {
 	
 	/**
 	 * 读取文件，返回二进制内容。
-	 * @author A4YL9ZZ pxu3@mmm.com
+	 * @author A4YL9ZZ 
 	 * @param file
 	 * @return
 	 * @throws IOException
@@ -93,6 +93,11 @@ public class FileUtil {
 	 * @throws FileNotFoundException 
      */
     public static InputStream getFileInput(String fileName) throws FileNotFoundException{
+        
+        InputStream is = FileUtil.class.getClassLoader().getResourceAsStream(fileName);
+        if(is!=null){
+            return is;
+        }
         return new FileInputStream(getFile(fileName));
     }
     

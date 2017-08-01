@@ -9,7 +9,7 @@ import java.util.zip.ZipOutputStream;
 
 /**
  * Zip文件相关工具包
- * @author A4YL9ZZ pxu3@mmm.com
+ * @author A4YL9ZZ 
  *
  */
 public class ZipUtil {
@@ -27,7 +27,7 @@ public class ZipUtil {
     
     /**
      * 增加文件
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param data
      * @param name
      * @throws IOException
@@ -38,7 +38,7 @@ public class ZipUtil {
     
     /**
      * 增加文件
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param data
      * @param name
      * @param parentDir
@@ -62,7 +62,7 @@ public class ZipUtil {
     
     /**
      * 输出
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @return
      * @throws IOException
      */

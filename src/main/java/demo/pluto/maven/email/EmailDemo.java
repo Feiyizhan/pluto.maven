@@ -27,7 +27,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -82,14 +85,19 @@ public class EmailDemo {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mailMessage, true);
 
             // 设置收件人，寄件人
-            //messageHelper.setFrom("徐明龙 <pxu3@mmm.com>");
+            //messageHelper.setFrom("徐明龙 <>");
             messageHelper.setFrom(new InternetAddress("cn-mto-sys@mmm.com", "CHINA MTO SYSTEM"));
             messageHelper.setTo("pxu3@mmm.com");
             messageHelper.setSubject("测试邮件中嵌套图片!！");
             // true 表示启动HTML格式的邮件
             messageHelper.setText("<html><head></head><body><h1>hello!!zhangjian</h1><img src=\"cid:aaa\"/></body></html>", true);
-            FileSystemResource img = new FileSystemResource(FileUtil.getFile("image/left.jpg"));
-            messageHelper.addInline("aaa", img);
+//            FileSystemResource img = new FileSystemResource(FileUtil.getFile("image/left.jpg"));
+            
+            ClassPathResource img = new ClassPathResource("image/left.jpg");
+//            System.out.println(messageHelper.getFileTypeMap().getContentType("image/left.jpg"));
+//            InputStreamResource img = new InputStreamResource(FileUtil.getFileInput("image/left.jpg"));
+//            messageHelper.addInline("aaa", img,messageHelper.getFileTypeMap().getContentType("image/left.jpg"));
+//            messageHelper.addInline("aaa", img);
             javaMailSender.send(mailMessage);
         } catch (MessagingException e) {
             // TODO Auto-generated catch block
@@ -97,6 +105,9 @@ public class EmailDemo {
         } catch (UnsupportedEncodingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+//        } catch (FileNotFoundException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
         }
     }
 
@@ -113,7 +124,7 @@ public class EmailDemo {
         
         // 抄送人
         List<String> ccs = new ArrayList<String>();
-        ccs.add("pxu3@mmm.com");
+        ccs.add("");
         // 秘密抄送人
         List<String> bccs = new ArrayList<String>();
         // 邮件模板
@@ -139,13 +150,13 @@ public class EmailDemo {
             String fromName = "交通安全系统部";
 //            fromName = MimeUtility.encodeText(fromName);
             System.out.println(fromName);
-//            helper.setFrom(new InternetAddress(fromName+" <pxu3@mmm.com>"));
-//            helper.setFrom(new InternetAddress("pxu3@mmm.com",fromName));
-//            helper.setFrom("pxu3@mmm.com",fromName);
+//            helper.setFrom(new InternetAddress(fromName+" <>"));
+//            helper.setFrom(new InternetAddress("",fromName));
+//            helper.setFrom("",fromName);
             helper.setFrom(new InternetAddress("xmlde@vip.qq.com",fromName,"utf-8"));
             
 //            helper.setFrom("交通安全系统部  <EWCS-TSSD@mmm.com>");
-//            helper.setFrom("Pluto Xu <pxu3@mmm.com>");
+//            helper.setFrom("Pluto Xu <>");
             if (receivers != null && receivers.size() > 0) {
                 String[] receiverArray = receivers.toArray(new String[receivers.size()]);
                 helper.setTo(receiverArray);

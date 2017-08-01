@@ -23,7 +23,7 @@ public class SqlUtil {
 
     /**
      * 根据Package的绝对路径，生成CRUD Sql
-     * @author a4yl9zz pxu3@mmm.com
+     * @author a4yl9zz 
      * @param packageName
      * @param saveFolder
      */
@@ -46,7 +46,7 @@ public class SqlUtil {
     /**
      * 根据Class文件绝对存放路径，生成CRUD Sql
      * 
-     * @author a4yl9zz pxu3@mmm.com
+     * @author a4yl9zz 
      * @param classPath
      * @param saveFolder
      * @throws ClassNotFoundException
@@ -58,7 +58,7 @@ public class SqlUtil {
     /**
      * 根据指定的BeanClass生成CRUD SQL
      * 
-     * @author a4yl9zz pxu3@mmm.com
+     * @author a4yl9zz 
      * @param cl
      * @param saveFolder
      */
@@ -165,7 +165,7 @@ public class SqlUtil {
     
     /**
      * 生产查询和修改的字段SQL。
-     * @author a4yl9zz pxu3@mmm.com
+     * @author a4yl9zz 
      * @param out
      * @param allfieldBeanList
      * @param fieldBeanList
@@ -332,7 +332,7 @@ public class SqlUtil {
     
     /**
      * 获取Class中有效成员字段列表。
-     * @author a4yl9zz pxu3@mmm.com
+     * @author a4yl9zz 
      * @param cl
      * @return
      */
@@ -366,7 +366,7 @@ public class SqlUtil {
     
     /**
      * 获取Class中有效成员字段列表,排除掉ID。
-     * @author a4yl9zz pxu3@mmm.com
+     * @author a4yl9zz 
      * @param cl
      * @return
      */

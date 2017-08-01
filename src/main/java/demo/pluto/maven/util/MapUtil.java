@@ -8,7 +8,7 @@ import java.util.Set;
 
 /**
  * Map的工具类
- * @author A4YL9ZZ pxu3@mmm.com
+ * @author A4YL9ZZ 
  *
  */
 public class MapUtil {
@@ -16,7 +16,7 @@ public class MapUtil {
     /**
      * 精确比较两个Map是否一致。<br/>
      * 包括K的顺序，值。V的顺序，值。
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param map1
      * @param map2
      * @return

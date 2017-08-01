@@ -2,7 +2,7 @@ package demo.pluto.maven.pdf.old.field;
 
 /**
  * 字段接口的抽象实现
- * @author A4YL9ZZ pxu3@mmm.com
+ * @author A4YL9ZZ 
  *
  */
 public abstract class AbstractField implements Field {

@@ -28,7 +28,7 @@ public class PackageUtil {
   
     /**
      * 获取包下所有class文件名列表
-     * @author a4yl9zz pxu3@mmm.com
+     * @author a4yl9zz 
      * @param packageName
      * @param classPath
      * @return

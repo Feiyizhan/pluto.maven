@@ -2,7 +2,7 @@ package demo.pluto.maven.pdf.old.field;
 
 /**
  * 图片数据数据字段
- * @author A4YL9ZZ pxu3@mmm.com
+ * @author A4YL9ZZ 
  *
  */
 public class ImageField extends AbstractField {

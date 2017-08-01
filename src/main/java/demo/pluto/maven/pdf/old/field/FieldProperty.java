@@ -12,7 +12,7 @@ import com.lowagie.text.pdf.BaseFont;
 
 
 /**
- * @author A4YL9ZZ pxu3@mmm.com
+ * @author A4YL9ZZ 
  *
  */
 public class FieldProperty {

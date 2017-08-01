@@ -33,7 +33,7 @@ public enum FontProperty{
     }
     /**
      * 获取小一号的字体
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param fp
      * @return
      */

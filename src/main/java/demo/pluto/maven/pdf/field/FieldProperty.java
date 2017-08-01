@@ -37,7 +37,7 @@ public class FieldProperty {
 
 	
     /**
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * <br/> 值类型。
      */
     public enum ValueType { STRING,LIST,TABLE,BINARY } 
@@ -70,7 +70,7 @@ public class FieldProperty {
 	
     /**
      * 创建String值类型的字段。
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param stringValue
      * @param name
      */
@@ -85,7 +85,7 @@ public class FieldProperty {
 
     /**
      * 创建指定类型的字段对象。
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param valueType
      * @param name
      */
@@ -99,7 +99,7 @@ public class FieldProperty {
 
     /**
      * 创建二进制值字段对象
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param binaryValue
      * @param name
      */
@@ -114,7 +114,7 @@ public class FieldProperty {
 
     /**
      * 创建列表类型的字段对象
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param listValue
      * @param name
      */
@@ -129,7 +129,7 @@ public class FieldProperty {
 
     /**
      * 创建table类型的字段
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param tableValue
      * @param name
      */

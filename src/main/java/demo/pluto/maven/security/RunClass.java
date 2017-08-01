@@ -59,7 +59,7 @@ public class RunClass {
             //3.进行加密  
             Cipher cipher=Cipher.getInstance("AES");   // 创建密码器  
             cipher.init(Cipher.ENCRYPT_MODE, key);   // 以加密的方式用密钥初始化此 Cipher。
-            byte[] data = "pxu3@mmm.com".getBytes("utf-8");
+            byte[] data = "".getBytes("utf-8");
             byte[] result= cipher.doFinal(data);   //加密内容
             
             System.out.println("加密前的内容："+HexBin.encode(data));   
@@ -130,7 +130,7 @@ public class RunClass {
             //3.进行加密  
             Cipher cipher=Cipher.getInstance("DES");   // 创建密码器  
             cipher.init(Cipher.ENCRYPT_MODE, key);   // 以加密的方式用密钥初始化此 Cipher。
-            byte[] data = "pxu3@mmm.com".getBytes("utf-8");
+            byte[] data = "".getBytes("utf-8");
             byte[] result= cipher.doFinal(data);   //加密内容
             
             System.out.println("加密前的内容："+HexBin.encode(data));   

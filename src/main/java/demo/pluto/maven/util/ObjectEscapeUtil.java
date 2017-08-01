@@ -17,7 +17,7 @@ import org.springframework.web.util.HtmlUtils;
 
 
 /**
- * @author A4YL9ZZ pxu3@mmm.com
+ * @author A4YL9ZZ 
  * <br/> 对Object 中所有String值进行HtmlEscape操作。
  * <br/>HtmlEscape 操作调用的是org.springframework.web.util.HtmlUtils.htmlEscape
  */
@@ -61,7 +61,7 @@ public class ObjectEscapeUtil {
 
 
     /**
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * 对Object中的所有的有get和set方法的String类型成员属性进行HTMLEscape操作。
      * <br/> 在执行htmlEscape之前，先执行htmlUnescape。防止重复Escape。
      * <br/> Object中的成员属性如果也是POJO Object。那么将会递归处理。
@@ -161,7 +161,7 @@ public class ObjectEscapeUtil {
 
     /**
      * 获取class的所有符合要求的成员方法
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param cls
      * @return
      */
@@ -202,7 +202,7 @@ public class ObjectEscapeUtil {
 
     /**
      * 获取class的所有符合要求的字段
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param c
      * @param fields
      * @return
@@ -233,7 +233,7 @@ public class ObjectEscapeUtil {
     
     /**
      * 首字母大写
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param str
      * @return
      */
@@ -244,7 +244,7 @@ public class ObjectEscapeUtil {
     
     /**
      * 判断是否是需要包含的成员方法
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param m
      * @return
      */
@@ -267,7 +267,7 @@ public class ObjectEscapeUtil {
     
     /**
      * 判断是否是需要包含的成员字段
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param f
      * @return
      */

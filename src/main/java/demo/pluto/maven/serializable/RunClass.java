@@ -21,7 +21,7 @@ public class RunClass {
     
     /**
      * 测试系列化对象到多个文件
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      */
     public static void testSerializableObjectToMultiFile(){
         String databaseName="database";
@@ -89,7 +89,7 @@ public class RunClass {
     /**
      * 系列化Database对象全部信息到目录<br/>
      * 对于tableList成员，每个Table独立生成一个文件。文件名为Table名称
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param database
      * @param folderName
      */
@@ -113,7 +113,7 @@ public class RunClass {
 
     /**
      * 从目录中反系列化Database对象全部信息
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param folderName
      * @param databaseName
      * @return
@@ -144,7 +144,7 @@ public class RunClass {
     
     /**
      * 保存对象
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param obj
      */
     public static void writeObjectToFile(Object obj,String fileName)
@@ -167,7 +167,7 @@ public class RunClass {
     
     /**
      * 读取对象
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param fileName
      * @return
      */

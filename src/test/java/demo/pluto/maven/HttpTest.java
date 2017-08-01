@@ -45,7 +45,7 @@ public class HttpTest {
     
     /**
      * 手动设置database当前状态
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      */
     public static void resetDatabase(){
         Database database =null;
@@ -71,7 +71,7 @@ public class HttpTest {
     
     /**
      * 输出database数据
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      */
     public static void printDatabase(){
         Database database =null;
@@ -159,7 +159,7 @@ public class HttpTest {
 
     /**
      * 下载databas数据
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      */
     public static void downloadDatabase(){
         Database database =null;
@@ -183,7 +183,7 @@ public class HttpTest {
     
     /**
      * 重新下载指定的Databse的Table数据
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param tableName
      */
     public static void redownloadDatabase(String tableName){
@@ -240,7 +240,7 @@ public class HttpTest {
     
     /**
      * 填充表数量
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param database
      */
     public static boolean fillTableCount(Database database){
@@ -262,7 +262,7 @@ public class HttpTest {
     
     /**
      * 填充表名
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param database
      * @return
      */
@@ -296,7 +296,7 @@ public class HttpTest {
     
     /**
      * 填充每张表
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param database
      * @return
      */
@@ -366,7 +366,7 @@ public class HttpTest {
 
     /**
      * 填充table列表中的表的总信息
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param database
      * @return
      */
@@ -404,7 +404,7 @@ public class HttpTest {
     
     /**
      * 统计表的字段数
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param database
      * @param table
      * @return
@@ -423,7 +423,7 @@ public class HttpTest {
     
     /**
      * 统计表的记录数
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param table
      * @return
      */
@@ -442,7 +442,7 @@ public class HttpTest {
     
     /**
      * 填充字段名列表
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param database
      * @param table
      * @return
@@ -475,7 +475,7 @@ public class HttpTest {
     
     /**
      * 填充表格数据
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param database
      * @param table
      * @return
@@ -530,7 +530,7 @@ public class HttpTest {
     
     /**
      * 格式化查询SQL语句
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param userName
      * @param tableSql
      * @return
@@ -543,7 +543,7 @@ public class HttpTest {
  
     /**
      * 执行SQL
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param sql
      * @return
      */
@@ -570,7 +570,7 @@ public class HttpTest {
     
     /**
      * 解析结果
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param reusltVaule
      * @return
      */
@@ -588,7 +588,7 @@ public class HttpTest {
 
     /**
      * 发送HTTP请求
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param httpClient
      * @param url 请求的URL
      * @param redirectDomain 转向后相对路径的服务器URL
@@ -646,7 +646,7 @@ public class HttpTest {
      * Chrome/58.0.3029.110 Safari/537.36 <br/>
      * Conten-charset : utf-8
      * 
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param url
      * @param nameValuePairs
      * @return
@@ -679,7 +679,7 @@ public class HttpTest {
     /**
      * 设置代理
      * 
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param httpClient
      */
     public static void initProxy(HttpClient httpClient) {
@@ -694,7 +694,7 @@ public class HttpTest {
     
     /**
      * 保存对象
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param obj
      */
     public static void writeObjectToFile(Object obj,String fileName)

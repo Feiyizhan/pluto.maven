@@ -1,7 +1,7 @@
 package demo.pluto.maven.pdf.old.field;
 
 /**
- * @author A4YL9ZZ pxu3@mmm.com
+ * @author A4YL9ZZ 
  * <br/> table类型的值。
  */
 public class TableValue{

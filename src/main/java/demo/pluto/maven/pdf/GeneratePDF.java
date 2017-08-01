@@ -37,7 +37,7 @@ import demo.pluto.maven.util.FileUtil;
 
 
 /**
- * @author A4YL9ZZ pxu3@mmm.com
+ * @author A4YL9ZZ 
  * <br/>基于iText 5.5.10
  */
 public class GeneratePDF {
@@ -155,7 +155,7 @@ public class GeneratePDF {
     
     /**
      * 获取字段的Position
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param fields
      * @param name
      * @return
@@ -171,7 +171,7 @@ public class GeneratePDF {
     
     /**
      * 根据单元格的信息，调整图片的缩放比例和相对位置。
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param img
      * @param spot
      * @return

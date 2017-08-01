@@ -51,7 +51,7 @@ import demo.pluto.maven.pdf.old.field.TableValue;
 import demo.pluto.maven.util.FileUtil;
 
 /**
- * @author A4YL9ZZ pxu3@mmm.com
+ * @author A4YL9ZZ 
  * <br/>基于iText 2.1.*版本
  */
 public class GeneratePDFOld {
@@ -74,7 +74,7 @@ public class GeneratePDFOld {
     
     /**
      * 合并多个Page页为一个PDF
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param mainPage
      * @param pageList
      * @return
@@ -106,7 +106,7 @@ public class GeneratePDFOld {
     
     /**
      * 根据PDFform的数据填充指定的模版，并返回填充好的结果。
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param template
      * @param pdfForm
      * @return
@@ -222,7 +222,7 @@ public class GeneratePDFOld {
     
     /**
      * 填充简单数据
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param pdfForm
      * @param stamp
      * @throws MalformedURLException
@@ -269,7 +269,7 @@ public class GeneratePDFOld {
     
     /**
      * 填充图片数据
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param pdfForm
      * @param stamp
      * @throws MalformedURLException
@@ -318,7 +318,7 @@ public class GeneratePDFOld {
     
     /**
      * 填充表格
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param pdfForm
      * @param stamp
      * @param pageNumber
@@ -381,7 +381,7 @@ public class GeneratePDFOld {
     
     /**
      * 获取字段的Position
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param fields
      * @param name
      * @return
@@ -397,7 +397,7 @@ public class GeneratePDFOld {
     
     /**
      * 根据单元格的信息，调整图片的缩放比例和相对位置。
-     * @author A4YL9ZZ pxu3@mmm.com
+     * @author A4YL9ZZ 
      * @param img
      * @param spot
      * @return
