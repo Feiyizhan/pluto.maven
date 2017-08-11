@@ -1,0 +1,39 @@
+http://localhost:8080/ewcstssd/manage/warranty_bidding/detail_show.do?biddingId=42755E11-7CBF-4297-B210-6B3B1DC11FDD&emailType=11
+
+extends PageTable<Userinfo> 
+
+测试帐号: CNT009512
+
+http://localhost:8080/ewcstssd/manage/warranty_contract/detail_show.do?warrantyId=4C892D9C-C01E-40F7-B44F-71BAF7804E1C&emailType=20
+
+SELECT     contract.id "id",     contract.email_date "emailDate",     e.email as "currentApproverEmail",     u.name as "creatorName"    
+FROM     t_warranty_contract contract left join      t_userinfo u on contract.creator_id = u.vsrm_id and u.role_id = 11 left join     t_employee e on contract.current_approver_id = e.vsrm_id    
+WHERE     contract.status_id = 1     and e.email is not null     AND DATEDIFF(DAY, contract.email_date, GETDATE()) >= 2  
+
+contract.getCurrentApproverEmail()
+contract.getCreatorName()
+
+contract.getRequestId()
+contract.getProjectRegion()
+contract.getProjectName()
+contract.getId()
+
+15608.10 
+
+1.2
+245  =490
+1365.84  =2731.68  -490 = 2241.68
+
+1.1
+13042+2035.6=15077.6
+1262.80 = 2525.6 - 490 =2035.6
+
+质保清单审批提醒邮件无法接收的BUG。
+
+
+合同PDF重置是否需要重置关联的所有清单的PDF？
+
+标书编号：（非必填）
+
+
+http://localhost:8080/ewcstssd/manage/super_admin/bidding_test_data.do
